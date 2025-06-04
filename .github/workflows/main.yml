@@ -26,9 +26,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
 
     - name: Build Kernel
-      uses: ./
+      uses: ./ElGabrielx7
       with:
-          kernel-url: https://github.com/AcmeUI-Devices/android_kernel_xiaomi_cas
+          kernel-url: https://github.com/ElGabrielx7/E7Plus_LOS.git
           kernel-dir: msm-4.19
           kernel-branch: taffy
           config: cas_defconfig
@@ -37,7 +37,7 @@ jobs:
           aosp-clang: true
           ksu: true
           ksu-version: main
-          android-version: 12
-          aosp-clang-version: r383902
+          android-version: 15
+          aosp-clang-version: r522817
           disable-lto: true
           anykernel3: true
