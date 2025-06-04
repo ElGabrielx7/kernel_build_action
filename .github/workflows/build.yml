@@ -18,7 +18,7 @@ jobs:
           kernel-url: https://github.com/ElGabrielx7/E7Plus_LOS.git
           kernel-dir: msm-4.19
           kernel-branch: lineage-22.2
-          config: cas_defconfig
+          config: ranchu64_defconfig
           arch: arm64
           aosp-gcc: true
           aosp-clang: true
