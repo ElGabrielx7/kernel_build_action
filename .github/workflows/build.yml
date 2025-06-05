@@ -1,29 +1,42 @@
-name: Build Kernel
+name: Build Kernel with manual KernelSU
+
 on:
   workflow_dispatch:
 
 jobs:
-  Build-Kernel:
-    strategy:
-      fail-fast: false
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
-      - name: Build Kernel
-        uses: dabao1955/kernel_build_action@main
-        with:
-          kernel-url: https://github.com/ElGabrielx7/E7Plus_LOS.git
-          kernel-dir: msm-4.19
-          kernel-branch: lineage-22.2
-          config: ranchu64_defconfig
-          arch: arm64
-          aosp-gcc: true
-          aosp-clang: true
-          ksu: true
-          ksu-version: v0.9.5
-          android-version: 12
-          aosp-clang-version: r383902
-          disable-lto: true
-          anykernel3: true
+    - name: Checkout Kernel Source
+      uses: actions/checkout@v3
+      with:
+        repository: ElGabrielx7/E7Plus_LOS
+        ref: lineage-22.2
+        path: kernel-src
+
+    - name: Clone KernelSU repo
+      run: |
+        git clone --branch v0.9.5 https://github.com/kernelsu/KernelSU.git ksu
+
+    - name: Apply KernelSU patch manually
+      run: |
+        cd kernel-src
+        # Ajusta o caminho e comando conforme necessário, exemplo:
+        bash ../ksu/apply-patch.sh
+
+    - name: Build Kernel
+      uses: dabao1955/kernel_build_action@main
+      with:
+        kernel-url: ./kernel-src
+        kernel-dir: msm-4.19
+        kernel-branch: lineage-22.2
+        config: ranchu64_defconfig
+        arch: arm64
+        aosp-gcc: true
+        aosp-clang: true
+        ksu: false           # DESABILITA KernelSU do action
+        android-version: 12
+        aosp-clang-version: r383902
+        disable-lto: true
+        anykernel3: true
