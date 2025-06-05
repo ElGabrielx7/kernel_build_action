@@ -15,20 +15,17 @@ jobs:
           repository: ElGabrielx7/E7Plus_LOS
           ref: lineage-22.2
 
-      - name: Clone KernelSU (public repo tiann)
-        run: git clone --branch v0.9.4 https://github.com/tiann/KernelSU.git ksu
-
       - name: Build Kernel
         uses: dabao1955/kernel_build_action@main
         with:
-          kernel-url: ./  # diretório local onde seu kernel está
+          kernel-url: ./  
           kernel-dir: msm-4.19
           kernel-branch: lineage-22.2
           config: ranchu64_defconfig
           arch: arm64
           aosp-gcc: true
           aosp-clang: true
-          ksu: false          # desabilita o clone interno do kernel_build_action
+          ksu: true           # <- habilita o patch automático!
           android-version: 12
           aosp-clang-version: r383902
           disable-lto: true
