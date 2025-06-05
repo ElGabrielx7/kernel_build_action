@@ -1,42 +1,35 @@
-name: Build Kernel with manual KernelSU
-
+name: Build Kernel
 on:
   workflow_dispatch:
 
 jobs:
-  build:
+  Build-Kernel:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
-    - name: Checkout Kernel Source
-      uses: actions/checkout@v3
-      with:
-        repository: ElGabrielx7/E7Plus_LOS
-        ref: lineage-22.2
-        path: kernel-src
+      - name: Checkout kernel source
+        uses: actions/checkout@v3
+        with:
+          repository: ElGabrielx7/E7Plus_LOS
+          ref: lineage-22.2
 
-    - name: Clone KernelSU repo
-      run: |
-        git clone --branch v0.9.5 https://github.com/kernelsu/KernelSU.git ksu
+      - name: Clone KernelSU (public repo tiann)
+        run: git clone --branch v0.9.4 https://github.com/tiann/KernelSU.git ksu
 
-    - name: Apply KernelSU patch manually
-      run: |
-        cd kernel-src
-        # Ajusta o caminho e comando conforme necessário, exemplo:
-        bash ../ksu/apply-patch.sh
-
-    - name: Build Kernel
-      uses: dabao1955/kernel_build_action@main
-      with:
-        kernel-url: ./kernel-src
-        kernel-dir: msm-4.19
-        kernel-branch: lineage-22.2
-        config: ranchu64_defconfig
-        arch: arm64
-        aosp-gcc: true
-        aosp-clang: true
-        ksu: false           # DESABILITA KernelSU do action
-        android-version: 12
-        aosp-clang-version: r383902
-        disable-lto: true
-        anykernel3: true
+      - name: Build Kernel
+        uses: dabao1955/kernel_build_action@main
+        with:
+          kernel-url: ./  # diretório local onde seu kernel está
+          kernel-dir: msm-4.19
+          kernel-branch: lineage-22.2
+          config: ranchu64_defconfig
+          arch: arm64
+          aosp-gcc: true
+          aosp-clang: true
+          ksu: false          # desabilita o clone interno do kernel_build_action
+          android-version: 12
+          aosp-clang-version: r383902
+          disable-lto: true
+          anykernel3: true
